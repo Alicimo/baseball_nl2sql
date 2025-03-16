@@ -2,9 +2,10 @@ import json
 from collections import Counter
 from math import sqrt
 from pathlib import Path
+from typing import Any
 
 from fire import Fire
-from sqlglot import diff, parse_one, tokenize
+from sqlglot import Expression, diff, parse_one, tokenize
 from sqlglot.optimizer.normalize import normalize
 from tqdm import tqdm
 
@@ -16,7 +17,7 @@ def normalize_sql(sql: str) -> str:
     return tree.sql()
 
 
-def count_nodes(ast):
+def count_nodes(ast: Expression) -> int:
     """Count the number of nodes in an ast."""
     return len(list(ast.walk()))
 
@@ -37,7 +38,7 @@ def ast_distance(sql_1: str, sql_2: str) -> float:
     return len(edits) / total_nodes if total_nodes > 0 else 0
 
 
-def tokenize_sql(sql) -> Counter:
+def tokenize_sql(sql: str) -> Counter[str]:
     """Tokenizes SQL query and return unique tokens and their counts"""
     parsed = tokenize(sql)
     tokens = Counter()
@@ -46,22 +47,24 @@ def tokenize_sql(sql) -> Counter:
     return tokens
 
 
-def cosine_similarity(sql_1: str, sql_2: str):
+def cosine_similarity(sql_1: str, sql_2: str) -> float:
     """Computes Cosine Similarity between two SQL strings."""
     tokens_1 = tokenize_sql(sql_1)
     tokens_2 = tokenize_sql(sql_2)
+
+    if len(tokens_1) == 0 or len(tokens_2) == 0:
+        return 0.0
 
     intersection = set(tokens_1) & set(tokens_2)
     dot_product = sum(tokens_1[token] * tokens_2[token] for token in intersection)
     magnitude1 = sqrt(sum(tokens_1[token] ** 2 for token in tokens_1))
     magnitude2 = sqrt(sum(tokens_2[token] ** 2 for token in tokens_2))
 
-    if magnitude1 == 0 or magnitude2 == 0:
-        return 0  # Return 0 if either magnitude is 0 (no common tokens)
     return dot_product / (magnitude1 * magnitude2)
 
 
-def evaluate_query(gen_query: str, ref_example: str) -> dict:
+def evaluate_query(gen_query: str, ref_example: str) -> dict[str, Any]:
+    """Evaluate a single query against a reference example."""
     if gen_query["question"] != ref_example["question"]:
         raise ValueError("Questions don't match")
 
