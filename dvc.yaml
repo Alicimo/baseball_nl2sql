@@ -1,0 +1,34 @@
+vars:
+  - paths:
+      schema: prompts/context/db_schema_descriptive.txt
+      examples: data/examples_queries_test.json
+      output_dir: output
+
+stages:
+  generate:
+    cmd: python src/generate.py
+      --schema_path ${paths.schema}
+      --examples_path ${paths.examples}
+      --output_dir ${paths.output_dir}
+    deps:
+      - src/generate.py
+      - ${paths.schema}
+      - ${paths.examples}
+    params:
+      - generate
+    outs:
+      - ${paths.output_dir}/generated_queries.json
+
+  evaluate:
+    cmd: python src/eval.py
+      --generated_queries_path ${paths.output_dir}/generated_queries.json
+      --reference_examples_path ${paths.examples}
+      --output_dir ${paths.output_dir}
+    deps:
+      - src/eval.py
+      - ${paths.output_dir}/generated_queries.json
+      - ${paths.examples}
+    metrics:
+      - ${paths.output_dir}/metrics.json
+    outs:
+      - ${paths.output_dir}/eval.json

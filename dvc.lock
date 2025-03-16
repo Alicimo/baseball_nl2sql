@@ -1,0 +1,54 @@
+schema: '2.0'
+stages:
+  generate:
+    cmd: python src/generate.py --schema_path prompts/context/db_schema_descriptive.txt
+      --examples_path data/examples_queries_test.json --output_dir output
+    deps:
+    - path: data/examples_queries_test.json
+      hash: md5
+      md5: eff0bf5bae554533ff8c9f8961bda5d5
+      size: 79303
+    - path: prompts/context/db_schema_descriptive.txt
+      hash: md5
+      md5: cb6b740d0c9b0b91e7b7b44d7df00da7
+      size: 15697
+    - path: src/generate.py
+      hash: md5
+      md5: f958f77af75f5aecb348a3a8c0bdb625
+      size: 3079
+    params:
+      params.yaml:
+        generate:
+          prompt: prompts/prompt.txt
+          model: qwen2.5-coder-14b-instruct
+          temperature: 0.1
+    outs:
+    - path: output/generated_queries.json
+      hash: md5
+      md5: 38aa28946042648032f8533c0ffef4e3
+      size: 2295
+  evaluate:
+    cmd: python src/eval.py --generated_queries_path output/generated_queries.json
+      --reference_examples_path data/examples_queries_test.json --output_dir output
+    deps:
+    - path: data/examples_queries_test.json
+      hash: md5
+      md5: eff0bf5bae554533ff8c9f8961bda5d5
+      size: 79303
+    - path: output/generated_queries.json
+      hash: md5
+      md5: 38aa28946042648032f8533c0ffef4e3
+      size: 2295
+    - path: src/eval.py
+      hash: md5
+      md5: bc2f291ce0005d7ffeea880f3f87fddb
+      size: 4090
+    outs:
+    - path: output/eval.json
+      hash: md5
+      md5: b9c9dd8164056819ac5b73e4b7bc6d70
+      size: 2268
+    - path: output/metrics.json
+      hash: md5
+      md5: db196bae6bd90705e76d791bac414247
+      size: 90

@@ -1,0 +1,63 @@
+# Task: Natural Language to SQL Translation for Baseball Database
+
+You are an expert SQL developer specializing in baseball statistics. Your task is to convert natural language questions about baseball into executable SQL queries for "The History of Baseball" database.
+
+## Rules:
+1. Generate ONLY valid SQL queries that can run on an SQL database
+2. Return the SQL query inside <sql> tags
+3. Format the SQL query properly with proper indentation and line breaks
+4. Use table aliases to make the query more readable (e.g., "FROM Players p")
+5. Do NOT include any explanations or text outside the SQL query itself
+
+## Database Schema:
+{{schema}}
+
+## Approach:
+1. Break down the natural language question to identify:
+   - The tables needed
+   - The columns to select
+   - The filtering conditions
+   - Any aggregations or ordering required
+2. Formulate a SQL query based on this analysis
+3. Return only the executable SQL query
+
+## Natural Language Question:
+Which states have produced the largest number of candidates inducted into the hall of fame?
+
+<sql>
+SELECT
+    m.birthState,
+    COUNT(h.playerID) AS inducted_count
+FROM HallOfFame h
+JOIN MASTER m ON h.playerID = m.playerID
+WHERE h.inducted = 'Y'
+GROUP BY m.birthState
+ORDER BY inducted_count DESC;
+</sql>
+
+## Natural Language Question:
+What is the top league that pays the most to their players?
+
+<sql>
+SELECT
+    s.lgID,
+    SUM(s.salary) AS total_salary
+FROM Salaries s
+GROUP BY s.lgID
+ORDER BY total_salary DESC
+LIMIT 1;
+</sql>
+
+## Natural Language Question:
+What is the average pay for players inducted into the hall of fame?
+
+<sql>
+SELECT
+    AVG(s.salary) AS average_salary
+FROM Salaries s
+JOIN HallOfFame h ON s.playerID = h.playerID
+WHERE h.inducted = 'Y';
+</sql>
+
+## Natural Language Question:
+{{user_question}}
