@@ -3,7 +3,6 @@ from collections import Counter
 from math import sqrt
 from pathlib import Path
 
-import numpy as np
 from fire import Fire
 from sqlglot import diff, parse_one, tokenize
 from sqlglot.optimizer.normalize import normalize
@@ -66,7 +65,7 @@ def evaluate_query(gen_query: str, ref_example: str) -> dict:
     if gen_query["question"] != ref_example["question"]:
         raise ValueError("Questions don't match")
 
-    gen_normed = normalize_sql(gen_query["query"])
+    gen_normed = normalize_sql(gen_query["generated_query"])
     ref_normed = normalize_sql(ref_example["query"])
 
     return {
@@ -109,8 +108,10 @@ def main(
 
     # Save tracked metric(s)
     metrics = {
-        "ast_distance_mean": np.mean([result["ast_distance"] for result in results]),
-        "token_cosine_mean": np.std([result["token_cosine"] for result in results]),
+        "ast_distance_mean": sum([result["ast_distance"] for result in results])
+        / len(results),
+        "token_cosine_mean": sum([result["token_cosine"] for result in results])
+        / len(results),
     }
     (output_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
 

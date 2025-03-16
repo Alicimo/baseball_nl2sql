@@ -2,11 +2,11 @@ The Baseball database contains the following tables and relationships.
 The design follows these general principles.
 Each player is assigned a unique number (playerID).
 All of the information relating to that player is tagged with his playerID.
-The playerIDs are linked to names and birthdates in the MASTER table.
+The playerIDs are linked to names and birthdates in the Player table.
 
 The database is comprised of the following main tables:
 
-  MASTER - Player names, DOB, and biographical info
+  Player - Player names, DOB, and biographical info
   Batting - batting statistics
   Pitching - pitching statistics
   Fielding - fielding statistics
@@ -35,7 +35,7 @@ It is supplemented by these tables:
   CollegePlaying - list of players and the colleges they attended
 
 --------------------------------------------------------------------------
-MASTER table
+Player table
 
 
 playerID       A unique code asssigned to each player.  The playerID links
