@@ -10,7 +10,7 @@ stages:
       size: 79303
     - path: prompts/context/db_schema_descriptive.txt
       hash: md5
-      md5: cb6b740d0c9b0b91e7b7b44d7df00da7
+      md5: afbe122901132dd2382463652e2d4128
       size: 15697
     - path: src/generate.py
       hash: md5
@@ -19,14 +19,14 @@ stages:
     params:
       params.yaml:
         generate:
-          prompt: prompts/prompt.txt
+          prompt: prompts/prompt_CoT.txt
           model: qwen2.5-coder-14b-instruct
           temperature: 0.1
     outs:
     - path: output/generated_queries.json
       hash: md5
-      md5: 97db7005faa0028617cbe477c4712907
-      size: 2157
+      md5: d516e363edf2dd8e647b2637e7292533
+      size: 8078
   evaluate:
     cmd: python src/eval.py --generated_queries_path output/generated_queries.json
       --reference_examples_path data/examples_queries_test.json --output_dir output
@@ -37,8 +37,8 @@ stages:
       size: 79303
     - path: output/generated_queries.json
       hash: md5
-      md5: 97db7005faa0028617cbe477c4712907
-      size: 2157
+      md5: d516e363edf2dd8e647b2637e7292533
+      size: 8078
     - path: src/eval.py
       hash: md5
       md5: 386177348fb2ca4e8ca804e44b32d9b1
@@ -46,9 +46,9 @@ stages:
     outs:
     - path: output/eval.json
       hash: md5
-      md5: 8b40cb9b47373f9cce567d7d724591d6
-      size: 2172
+      md5: b57886ac6d14e6fbd6c038edbf4693c1
+      size: 2132
     - path: output/metrics.json
       hash: md5
-      md5: 8393a6341119a836f12bec340b93b686
-      size: 89
+      md5: 3aa4a0288e775f6dd5e43a9657ae69a9
+      size: 88

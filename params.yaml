@@ -1,4 +1,4 @@
 generate:
-  prompt: prompts/prompt.txt
+  prompt: prompts/prompt_CoT.txt
   model: qwen2.5-coder-14b-instruct
   temperature: 0.1
