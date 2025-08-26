@@ -1,32 +1,32 @@
 schema: '2.0'
 stages:
   generate:
-    cmd: python src/generate.py --schema_path prompts/context/db_schema_descriptive.txt
-      --examples_path data/examples_queries_test.json --output_dir output
+    cmd: python src/generate.py --examples_path data/examples_queries_test.json --output_dir
+      output
     deps:
     - path: data/examples_queries_test.json
       hash: md5
       md5: eff0bf5bae554533ff8c9f8961bda5d5
       size: 79303
-    - path: prompts/context/db_schema_descriptive.txt
-      hash: md5
-      md5: afbe122901132dd2382463652e2d4128
-      size: 15697
     - path: src/generate.py
       hash: md5
-      md5: 2bdaf46366bface42d68cae1044fc4f3
-      size: 3089
+      md5: 8eecc111881991c0dd0c75c5ecdea3ad
+      size: 4353
     params:
       params.yaml:
         generate:
-          prompt: prompts/prompt_CoT.txt
-          model: qwen2.5-coder-14b-instruct
-          temperature: 0.1
+          prompt:
+            prompt_path: prompts/prompt_CoT.txt
+            schema_path: prompts/context/db_schema_descriptive.txt
+          llm:
+            model: qwen2.5-coder-14b-instruct
+            temperature: 1.0
+            max_tokens: 3000
     outs:
     - path: output/generated_queries.json
       hash: md5
-      md5: d516e363edf2dd8e647b2637e7292533
-      size: 8078
+      md5: a9c0cb8e3a2a0d2a4d892481fcd8d8b8
+      size: 2941
   evaluate:
     cmd: python src/eval.py --generated_queries_path output/generated_queries.json
       --reference_examples_path data/examples_queries_test.json --output_dir output
@@ -37,18 +37,18 @@ stages:
       size: 79303
     - path: output/generated_queries.json
       hash: md5
-      md5: d516e363edf2dd8e647b2637e7292533
-      size: 8078
+      md5: a9c0cb8e3a2a0d2a4d892481fcd8d8b8
+      size: 2941
     - path: src/eval.py
       hash: md5
-      md5: 386177348fb2ca4e8ca804e44b32d9b1
-      size: 4079
+      md5: 7122d28657de5d5eafc773cb5c7774fb
+      size: 4514
     outs:
     - path: output/eval.json
       hash: md5
-      md5: b57886ac6d14e6fbd6c038edbf4693c1
-      size: 2132
+      md5: 78bd7c1af6137405f8425055f97857b8
+      size: 1759
     - path: output/metrics.json
       hash: md5
-      md5: 3aa4a0288e775f6dd5e43a9657ae69a9
-      size: 88
+      md5: e9b5a763d5cac0497ef70d11e777bcd9
+      size: 89

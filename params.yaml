@@ -1,4 +1,8 @@
 generate:
-  prompt: prompts/prompt_CoT.txt
-  model: qwen2.5-coder-14b-instruct
-  temperature: 0.1
+  prompt:
+    prompt_path: prompts/prompt_CoT.txt
+    schema_path: prompts/context/db_schema_descriptive.txt
+  llm:
+    model: qwen2.5-coder-14b-instruct
+    temperature: 1.0
+    max_tokens: 3000
