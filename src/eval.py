@@ -68,6 +68,16 @@ def evaluate_query(gen_query: str, ref_example: str) -> dict[str, Any]:
     if gen_query["question"] != ref_example["question"]:
         raise ValueError("Questions don't match")
 
+    # Handle edge case of no query returned
+    if not gen_query["generated_query"]:
+        return {
+            "question": gen_query["question"],
+            "generated_query": gen_query["generated_query"],
+            "reference_query": ref_example["query"],
+            "ast_distance": 1,
+            "token_cosine": 0,
+        }
+
     gen_normed = normalize_sql(gen_query["generated_query"])
     ref_normed = normalize_sql(ref_example["query"])
 
